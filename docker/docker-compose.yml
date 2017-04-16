@@ -1,0 +1,25 @@
+data:
+  image: busybox
+  container_name: "data"
+  volumes:
+    - ./virtualhost:/etc/httpd/conf.d/virtualhost/
+    - ../logs:/var/log/httpd
+    - ../www:/var/www
+
+app:
+  image: docker-centos7-php7
+  container_name: "app"
+  ports:
+    - '9000:9000'
+  volumes_from:
+    - data
+
+web:
+  image: docker-centos7-httpd24
+  container_name: "web"
+  ports: 
+    - '80:80'
+  links:
+    - app
+  volumes_from:
+    - data
